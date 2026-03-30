@@ -1,0 +1,34 @@
+services:
+  node0:
+    build: .
+    container_name: raft-node0
+    hostname: node0
+    command: ["--id", "0", "--port", "9000", "--peers", "node1:9000,node2:9000"]
+    ports:
+      - "9100:9100"  # control port
+    networks:
+      - raft-net
+
+  node1:
+    build: .
+    container_name: raft-node1
+    hostname: node1
+    command: ["--id", "1", "--port", "9000", "--peers", "node0:9000,node2:9000"]
+    ports:
+      - "9101:9100"
+    networks:
+      - raft-net
+
+  node2:
+    build: .
+    container_name: raft-node2
+    hostname: node2
+    command: ["--id", "2", "--port", "9000", "--peers", "node0:9000,node1:9000"]
+    ports:
+      - "9102:9100"
+    networks:
+      - raft-net
+
+networks:
+  raft-net:
+    driver: bridge
